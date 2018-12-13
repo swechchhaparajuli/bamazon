@@ -43,10 +43,9 @@ function run() {
     .then(function(answer) {
       var query = "SELECT * FROM products WHERE item_id IN (?)";
       connection.query(query, [answer.id], function(err, res) {
-        console.log(res[0].item_id);
-        console.log(res[0].stock_quantity);
           if(res[0].item_id == answer.id){
             if((res[0].stock_quantity > answer.quantity) || (res[0].stock_quantity == answer.quantity)){
+              console.log("That cost you: $" + res[0].price);
               decrementQuantity(answer.id, res[0].stock_quantity);
             }else{
               console.log("Sorry, insufficient quantity!");
@@ -62,8 +61,6 @@ function run() {
   }
 
   function decrementQuantity(i, q){
-    console.log("decremented BB");
-
   var query = connection.query(
     "UPDATE products SET ? WHERE ?",
     [
@@ -87,22 +84,4 @@ function run() {
       });
   }
 
-  function sellItem(){
-    inquirer
-    .prompt({
-      name: "username",
-      message: "Enter your username: "
-    },
 
-    {
-      name: "password",
-      message: "Enter your password: "
-    },
-    {
-      name: "itemName",
-      message: "Enter the name of the item you would like to sell: "
-    
-    }).then(function(answer){
-
-    });
-  }
