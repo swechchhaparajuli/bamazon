@@ -44,6 +44,8 @@ INSERT INTO products (product_name, department_name, price, stock_quantity)
 INSERT INTO products (product_name, department_name, price, stock_quantity)
     VALUES("Contigo Coffee Mug", "dishes", 84, 15);
 
+
+USE bamazon_db;
 SELECT * FROM products;
 
 

@@ -62,11 +62,30 @@ function runManage() {
 }
 
 function viewSales(){
-
+    var query = "SELECT * FROM products";
+      connection.query(query, function(err, res) {
+          for (var i = 0; i<res.length; i++){
+              if (res[i].stock_quantity > 0){
+                console.log(res[i]);
+              }
+          }
+      });
 }
 
 function viewLowInventory(){
-
+    var foundLowInventory = false;
+    var query = "SELECT * FROM products";
+      connection.query(query, function(err, res) {
+          for (var i = 0; i< 10; i++){
+              if (res[i].stock_quantity < 5){
+                foundLowInventory = true;
+                console.log(res[i]);
+              }
+          }
+          if(!foundLowInventory){
+              console.log("No low inventory!");
+          }
+      });
 }
 
 function addItems(){
