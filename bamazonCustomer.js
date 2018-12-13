@@ -47,7 +47,7 @@ function run() {
         console.log(res[0].stock_quantity);
           if(res[0].item_id == answer.id){
             if((res[0].stock_quantity > answer.quantity) || (res[0].stock_quantity == answer.quantity)){
-              decrementQuantity(answer.id);
+              decrementQuantity(answer.id, res[0].stock_quantity);
             }else{
               console.log("Sorry, insufficient quantity!");
               run();
@@ -61,13 +61,30 @@ function run() {
     });
   }
 
-  function decrementQuantity(i){
+  function decrementQuantity(i, q){
     console.log("decremented BB");
-    break;
-  }
 
-  function addForSale(){
+  var query = connection.query(
+    "UPDATE products SET ? WHERE ?",
+    [
+      { 
+        stock_quantity: q-1 //set ? points here
+      },
 
+      {
+        item_id: i //where ? points here
+      }
+    ],
+    function(err, res) {
+      show();
+  });
+}
+
+  function show(){
+    var query = "SELECT * FROM products";
+      connection.query(query, function(err, res) {
+        console.log(res);
+      });
   }
 
   function sellItem(){
