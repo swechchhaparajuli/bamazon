@@ -1,6 +1,7 @@
-var mysql = require("mysql2");
-var inquirer = require("inquirer");
-var clc = require("cli-color");
+const mysql = require("mysql2");
+const cTable = require('console.table');
+const inquirer = require("inquirer");
+const clc = require("cli-color");
 
 
 var connection = mysql.createConnection({
@@ -46,63 +47,26 @@ function runManage() {
     });
 }
 
-
-/*function createNewDept(){
-    inquirer
-    .prompt([{
-        name: "id",
-        type: "input",
-        message: "What is the id of the product you are trying to add?"
-    },
-    {
-        name: "quantity",
-        type: "input",
-        message: "How many of this product are you trying to add?"
-    }]).then(function(answer) {
-        var query = "SELECT * FROM products WHERE item_id IN (?)";
-        connection.query(query, [answer.id], function(err, res) {
-            if (err) throw err;
-            if(res[0].item_id == answer.id){
-                incrementQuantity(answer.id, (parseInt(res[0].stock_quantity)+parseInt(answer.quantity)));
-            }else{
-              console.log("Sorry, this item does not exist!");
-              run();
-            }
-        });
-    });
-}*/
-
-function addNewProd(){
+function createNewDept(){
     inquirer
     .prompt([{
         name: "name",
         type: "input",
-        message: "What is the name of the new product you would like to add?"
+        message: "What is the name of the new department you would like to add?"
     },
     {
-        name: "dept",
+        name: "overhead",
         type: "input",
-        message: "What department would this product be in?"
-    },
-    {
-        name: "price",
-        type: "input",
-        message: "How much would you like to sell this product for?"
-    },
-    {
-        name: "quantity",
-        type: "input",
-        message: "How many units would you like to add?"
-      }
+        message: "What is the over head costs of this department?"
+    }
     ])
     .then(function(answer) {
-        var query = "INSERT INTO products (product_name ,department_name, price, stock_quantity) VALUES (?)";
-        var values = [answer.name, answer.dept, parseInt(answer.price), parseInt(answer.quantity)];
+        var query = "INSERT INTO departments (department_name, over_head_costs) VALUES (?)";
+        var values = [answer.name, parseInt(answer.overhead)];
         connection.query(
             query, [values],
                 function(err, res) {
                     if (err) throw err;
-                show();
                 }
         );
     });
@@ -111,20 +75,24 @@ function addNewProd(){
   function viewSales(){
     var query = "SELECT * FROM departments";
       connection.query(query, function(err, res) {
-          console.log("department_id  |  department_name   |  over_head_costs   |  product_sales   |  total_profit")
         for (var i = 0; i < res.length; i++) {
-            console.log(
-                " " +
-                res[i].department_id +
-                "  ||  " +
-                res[i].department_name +
-                " || $" +
-                res[i].over_head_costs +
-                " || $" +
-                "product_sales" +
-                " || $" +
-                0-res[i].over_head_costs
-            );
+            console.table([
+                {
+                    "department_id" : res[i].department_id
+                },
+                {
+                    "department_name" : res[i].department_name
+                },
+                {
+                    "over_head_costs" : res[i].over_head_costs
+                },
+                {
+                    "product_sales" : 0
+                },
+                {
+                    "total_profit" : 0-res[i].over_head_costs
+                }
+            ]);
           }
       });
   }
