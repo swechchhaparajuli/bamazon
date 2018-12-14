@@ -74,27 +74,43 @@ function createNewDept(){
 
   function viewSales(){
     var query = "SELECT * FROM departments";
-    query += " LEFT JOIN products ON products.department_name = departments.department_name";
+    query += " INNER JOIN products ON products.department_name = departments.department_name";
       connection.query(query, function(err, res) {
         console.log(res);
-        for (var i = 0; i < res.length; i++) {
-            console.table([
-                {
-                    "department_id" : res[i].department_id
-                },
-                {
-                    "department_name" : res[i].department_name
-                },
-                {
-                    "over_head_costs" : res[i].over_head_costs
-                },
-                {
-                    "product_sales" : res[i].product_sales
-                },
-                {
-                    "total_profit" : parseInt(res[i].product_sales)-parseInt(res[i].over_head_costs)
-                }
-            ]);
+        var newTable = [{
+            "department_id" : res[0].department_id
+        ,
+        
+            "department_name" : res[0].department_name
+        ,
+        
+            "over_head_costs" : res[0].over_head_costs
+        ,
+        
+            "product_sales" : res[0].product_sales
+        ,
+        
+            "total_profit" : parseInt(res[0].product_sales)-parseInt(res[0].over_head_costs)
+        }];
+
+        for (var i = 1; i < res.length; i++) {
+            newTable.push(                
+            {
+                "department_id" : res[i].department_id
+            ,
+            
+                "department_name" : res[i].department_name
+            ,
+            
+                "over_head_costs" : res[i].over_head_costs
+            ,
+            
+                "product_sales" : res[i].product_sales
+            ,
+            
+                "total_profit" : parseInt(res[i].product_sales)-parseInt(res[i].over_head_costs)
+            })
           }
+          console.table(newTable);
       } );
   }
