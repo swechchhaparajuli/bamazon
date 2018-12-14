@@ -43,18 +43,21 @@ function run() {
     .then(function(answer) {
       var query = "SELECT * FROM products WHERE item_id IN (?)";
       connection.query(query, [answer.id], function(err, res) {
+        if(err){
+          console.log("Sorry, please try entering a different ID, your item does not exist");
+          run();
+        }
           if(res[0].item_id == answer.id){
             if((res[0].stock_quantity > answer.quantity) || (res[0].stock_quantity == answer.quantity)){
               console.log("That cost you: $" + res[0].price);
               decrementQuantity(answer.id, res[0].stock_quantity);
+              calcSales(res[0].item_id, parseInt(res[0].product_sales), parseInt(res[0].price), parseInt(res[0].quantity));
+              run();
             }else{
               console.log("Sorry, insufficient quantity!");
               run();
             }
             //console.log(res);
-          }else{
-            console.log("Sorry, this item does not exist!");
-            run();
           }
       });
     });
@@ -74,6 +77,22 @@ function run() {
     ],
     function(err, res) {
       show();
+  });
+}
+
+function calcSales(i, pSales, price, quantity){
+  var query = connection.query(
+    "UPDATE products SET ? WHERE ?",
+    [
+      { 
+        product_sales: pSales + (price * quantity) //set ? points here
+      },
+      {
+        item_id: i //where ? points here
+      }
+    ],
+    function(err, res) {
+      show(); 
   });
 }
 

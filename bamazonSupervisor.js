@@ -29,63 +29,25 @@ function runManage() {
         type: "rawlist",
         message: "Menu Options: ",
         choices: [
-          "View Products for Sale",
-          "View Low Inventory",
-          "Add to Inventory",
-          "Add New Product",
+          "View Product Sales by Department",
+          "Create New Department"
         ]
       })
       .then(function(answer) {
         switch (answer.action) {
-            case "View Products for Sale":
+            case "View Product Sales by Department":
               viewSales();
               break;
 
-            case "View Low Inventory":
-              viewLowInventory();
-              break;
-
-            case "Add to Inventory":
-              addItems();
-              break;
-
-            case "Add New Product":
-              addNewProd();
+            case "Create New Department":
+                createNewDept();
               break;
         }
     });
 }
 
-function viewSales(){
-    var query = "SELECT * FROM products";
-      connection.query(query, function(err, res) {
-        if (err) throw err;
-          for (var i = 0; i<res.length; i++){
-              if (res[i].stock_quantity > 0){
-                console.log(res[i]);
-              }
-          }
-      });
-}
 
-function viewLowInventory(){
-    var foundLowInventory = false;
-    var query = "SELECT * FROM products";
-      connection.query(query, function(err, res) {
-        if (err) throw err;
-          for (var i = 0; i< 10; i++){
-              if (res[i].stock_quantity < 5){
-                foundLowInventory = true;
-                console.log(res[i]);
-              }
-          }
-          if(!foundLowInventory){
-              console.log("No low inventory!");
-          }
-      });
-}
-
-function addItems(){
+/*function createNewDept(){
     inquirer
     .prompt([{
         name: "id",
@@ -108,9 +70,7 @@ function addItems(){
             }
         });
     });
-}
-
-
+}*/
 
 function addNewProd(){
     inquirer
@@ -136,8 +96,8 @@ function addNewProd(){
       }
     ])
     .then(function(answer) {
-        var query = "INSERT INTO products (product_name ,department_name, price, stock_quantity, product_sales) VALUES (?)";
-        var values = [answer.name, answer.dept, parseInt(answer.price), parseInt(answer.quantity), 0];
+        var query = "INSERT INTO products (product_name ,department_name, price, stock_quantity) VALUES (?)";
+        var values = [answer.name, answer.dept, parseInt(answer.price), parseInt(answer.quantity)];
         connection.query(
             query, [values],
                 function(err, res) {
@@ -148,38 +108,22 @@ function addNewProd(){
     });
 }
 
-function incrementQuantity(i, q){
-    var query = connection.query(
-      "UPDATE products SET ? WHERE ?",
-      [
-        { 
-          stock_quantity: q //set ? points here
-        },
-  
-        {
-          item_id: i //where ? points here
-        }
-      ],
-      function(err, res) {
-        show();
-    });
-  }
-
-  function show(){
-    var query = "SELECT * FROM products";
+  function viewSales(){
+    var query = "SELECT * FROM departments";
       connection.query(query, function(err, res) {
+          console.log("department_id  |  department_name   |  over_head_costs   |  product_sales   |  total_profit")
         for (var i = 0; i < res.length; i++) {
             console.log(
-                "Item ID: " +
-                res[i].item_id +
-                " || Product Name: " +
-                res[i].product_name +
-                " || Department: " +
+                " " +
+                res[i].department_id +
+                "  ||  " +
                 res[i].department_name +
-                " || Price : $" +
-                res[i].price +
-                " || Stock Quantity: " +
-                res[i].stock_quantity
+                " || $" +
+                res[i].over_head_costs +
+                " || $" +
+                "product_sales" +
+                " || $" +
+                0-res[i].over_head_costs
             );
           }
       });
