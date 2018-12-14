@@ -72,11 +72,15 @@ function createNewDept(){
     });
 }
 
+function fillDepartmentInfo(){
+    console.log("this part is under construction");
+}
+
   function viewSales(){
+    fillDepartmentInfo();
     var query = "SELECT * FROM departments";
     query += " INNER JOIN products ON products.department_name = departments.department_name";
       connection.query(query, function(err, res) {
-        console.log(res);
         var newTable = [{
             "department_id" : res[0].department_id
         ,

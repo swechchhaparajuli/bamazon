@@ -70,7 +70,6 @@ function run() {
       { 
         stock_quantity: q-1 //set ? points here
       },
-
       {
         item_id: i //where ? points here
       }
