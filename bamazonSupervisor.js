@@ -74,7 +74,9 @@ function createNewDept(){
 
   function viewSales(){
     var query = "SELECT * FROM departments";
+    query += " LEFT JOIN products ON products.department_name = departments.department_name";
       connection.query(query, function(err, res) {
+        console.log(res);
         for (var i = 0; i < res.length; i++) {
             console.table([
                 {
@@ -87,12 +89,12 @@ function createNewDept(){
                     "over_head_costs" : res[i].over_head_costs
                 },
                 {
-                    "product_sales" : 0
+                    "product_sales" : res[i].product_sales
                 },
                 {
-                    "total_profit" : 0-res[i].over_head_costs
+                    "total_profit" : parseInt(res[i].product_sales)-parseInt(res[i].over_head_costs)
                 }
             ]);
           }
-      });
+      } );
   }

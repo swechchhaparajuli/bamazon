@@ -55,6 +55,7 @@ INSERT INTO products (product_name, department_name, price, stock_quantity, prod
 
 USE bamazon_db;
 
+SELECT * FROM departments;
 SELECT * FROM products;
 
 
