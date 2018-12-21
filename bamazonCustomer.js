@@ -45,17 +45,17 @@ function run() {
       connection.query(query, [answer.id], function(err, res) {
         if(err){
           console.log("Sorry, please try entering a different ID, your item does not exist");
-          run();
+        
         }
           if(res[0].item_id == answer.id){
             if((res[0].stock_quantity > answer.quantity) || (res[0].stock_quantity == answer.quantity)){
               console.log("That cost you: $" + res[0].price);
-              decrementQuantity(answer.id, res[0].stock_quantity);
+                decrementQuantity(answer.id, res[0].stock_quantity, answer.quantity);
               calcSales(res[0].item_id, parseInt(res[0].product_sales), parseInt(res[0].price), parseInt(res[0].quantity));
-              run();
+       
             }else{
               console.log("Sorry, insufficient quantity!");
-              run();
+              
             }
             //console.log(res);
           }
@@ -63,19 +63,19 @@ function run() {
     });
   }
 
-  function decrementQuantity(i, q){
+  function decrementQuantity(i, q, temp){
   var query = connection.query(
     "UPDATE products SET ? WHERE ?",
     [
       { 
-        stock_quantity: q-1 //set ? points here
+        stock_quantity: q-temp //set ? points here
       },
       {
         item_id: i //where ? points here
       }
     ],
     function(err, res) {
-      show();
+
   });
 }
 
@@ -95,11 +95,54 @@ function calcSales(i, pSales, price, quantity){
   });
 }
 
-  function show(){
-    var query = "SELECT * FROM products";
-      connection.query(query, function(err, res) {
-        console.log(res);
-      });
-  }
+function show(){
+  var query = "SELECT * FROM products";
+    connection.query(query, function(err, res) {
+      var newTable = [{
+
+          "Item ID" : res[0].item_id
+      ,
+      
+          "Product Name" : res[0].product_name
+      ,
+      
+          "Department Name" : res[0].department_name
+      ,
+      
+          "Price" : res[0].price
+      ,
+      
+          "Stock Quantity" : res[0].stock_quantity
+      ,
+
+          "Product Sales" : res[0].product_sales
+
+      }];
+
+      for (var i = 1; i < res.length; i++) {
+          newTable.push(                
+          {
+                  "Item ID" : res[i].item_id
+              ,
+              
+                  "Product Name" : res[i].product_name
+              ,
+              
+                  "Department Name" : res[i].department_name
+              ,
+              
+                  "Price" : res[i].price
+              ,
+              
+                  "Stock Quantity" : res[i].stock_quantity
+              ,
+                  "Product Sales" : res[i].product_sales
+      
+          })
+        }
+        console.table(newTable);
+        run();
+    } );
+}
 
 

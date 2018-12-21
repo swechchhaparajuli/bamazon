@@ -104,12 +104,10 @@ function addItems(){
                 incrementQuantity(answer.id, (parseInt(res[0].stock_quantity)+parseInt(answer.quantity)));
             }else{
               console.log("Sorry, this item does not exist!");
-              run();
             }
         });
     });
 }
-
 
 
 function addNewProd(){
@@ -168,19 +166,47 @@ function incrementQuantity(i, q){
   function show(){
     var query = "SELECT * FROM products";
       connection.query(query, function(err, res) {
-        for (var i = 0; i < res.length; i++) {
-            console.log(
-                "Item ID: " +
-                res[i].item_id +
-                " || Product Name: " +
-                res[i].product_name +
-                " || Department: " +
-                res[i].department_name +
-                " || Price : $" +
-                res[i].price +
-                " || Stock Quantity: " +
-                res[i].stock_quantity
-            );
+        var newTable = [{
+            "Item ID" : res[0].item_id
+        ,
+        
+            "Product Name" : res[0].product_name
+        ,
+        
+            "Department Name" : res[0].department_name
+        ,
+        
+            "Price" : res[0].price
+        ,
+        
+            "Stock Quantity" : res[0].stock_quantity
+        ,
+            "Product Sales" : parseInt(res[0].product_sales)
+
+        }];
+
+        for (var i = 1; i < res.length; i++) {
+            newTable.push(                
+            {
+                    "Item ID" : res[i].item_id
+                ,
+                
+                    "Product Name" : res[i].product_name
+                ,
+                
+                    "Department Name" : res[i].department_name
+                ,
+                
+                    "Price" : res[i].price
+                ,
+                
+                    "Stock Quantity" : res[i].stock_quantity
+                ,
+                    "Product Sales" : parseInt(res[i].product_sales)
+        
+            })
           }
-      });
+          console.table(newTable);
+          runManage();
+      } );
   }

@@ -26,7 +26,7 @@ INSERT INTO products (product_name, department_name, price, stock_quantity, prod
     VALUES("iPhone", "electronics", 1000, 45, 0);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity, product_sales)
-    VALUES("Android", "electronics", 650, 25, 0);
+    VALUES("Android", "electronics", 650, 3, 0);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity, product_sales)
     VALUES("Polar Insulated Bottle", "dishes", 7, 345, 0);
@@ -55,7 +55,6 @@ INSERT INTO products (product_name, department_name, price, stock_quantity, prod
 
 USE bamazon_db;
 
-SELECT * FROM departments;
 SELECT * FROM products;
 
 

@@ -20,10 +20,10 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
   if (err) throw err;
-  runManage();
+  runSupervise();
 });
 
-function runManage() {
+function runSupervise() {
     inquirer
       .prompt({
         name: "action",
@@ -116,5 +116,7 @@ function fillDepartmentInfo(){
             })
           }
           console.table(newTable);
+
       } );
+      runSupervise();
   }
